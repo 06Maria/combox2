@@ -1,6 +1,6 @@
 <?php
 //get database conecction 
-require('../Config/database.php');
+require('Config/database.php');
 
 //get data from html form
 $f_name = $_POST['fname'];
