@@ -33,6 +33,9 @@ if ($supabase_res ) {
 } else {
     echo "<br>Error inserting data " ;
 }
+
+echo "<script>alert('User registered successfully!')</script>";
+header("refresh:0; url=login.html");
 /*
 echo "First Name is: " . $f_name;
 echo "Last Name is: " . $l_name;
