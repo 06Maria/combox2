@@ -4,7 +4,7 @@
     $local_user = "postgres";
     $local_port = "5432";
     $local_dbname = "combox";
-    $local_password = "unicesmag";
+    $local_password = "maria06";
 
     //Supabase connection
     $supabase_host = "aws-0-us-east-1.pooler.supabase.com";
