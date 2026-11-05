@@ -10,31 +10,41 @@ $p_email = $_POST['email'];
 $p_password = $_POST['password'];
 $pass_enc =md5 ('$p_password');
 
-//prepare query
-$sql = "
-    INSERT INTO users (
-        firstname, lastname, mobile_phone, email, password)
-    VALUES (
-        '$f_name', '$l_name', '$p_mobile', '$p_email', '$pass_enc'
-    )
-";
+$sql_validation_Email = 
+    "SELECT email FROM users WHERE email = '$p_email'";
 
-$local_res = pg_query($local_conn, $sql);
-$supabase_res = pg_query($supabase_conn, $sql);
+$sql_validation_phone = 
+    "SELECT mobile_phone FROM users WHERE mobile_phone = '$p_mobile'";
 
-if ($local_res ) {
-    echo "<br>Data inserted successfully into database.";
+//$local_res = pg_query($local_conn, $sql_validation);
+$supabase_res_email = pg_query($supabase_conn, $sql_validation_Email);
+$total_email = pg_fetch_result($supabase_res_email, 0, 0);
+$supabase_res_phone = pg_query($supabase_conn, $sql_validation_phone);
+$total_phone = pg_fetch_result($supabase_res_phone, 0, 0);
+
+if ($total_email > 0) {
+    echo "<script>alert('Email already exist, please use another one')</script>";
+    header ("refresh: 0; url=register.html");
+} else if ($total_phone > 0){
+    echo "<script>alert('Mobile Phone already exist, please use another one')</script>";
+    header ("refresh: 0; url=register.html");
 } else {
-    echo "<br>Error inserting data " ;
-}
+        //prepare query
+        $sql = "
+            INSERT INTO users (
+                firstname, lastname, mobile_phone, email, password)
+            VALUES (
+                '$f_name', '$l_name', '$p_mobile', '$p_email', '$pass_enc'
+            )";
 
-if ($supabase_res ) {
-    echo "<br>Data inserted successfully into database.";
-} else {
-    echo "<br>Error inserting data " ;
+        $supabase_res = pg_query($supabase_conn, $sql);
+        if ($supabase_res ) {
+            echo "<script>alert('Data inserted successfully into database.')</script>";
+            header ("refresh: 0; url=login.html");
+        } else {
+            echo "<script>alert('Error inserting data.')</script>";
+            header ("refresh: 0; url=register.html");
+        }
 }
-
-echo "<script>alert('User registered successfully!')</script>";
-header("refresh:0; url=login.html");
 
 ?>
